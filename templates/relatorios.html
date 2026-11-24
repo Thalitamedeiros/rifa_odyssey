@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block c %}<section class="card"><h3>Por rifa <a class="btn" href="{{ url_for('exportar') }}">Exportar Excel (CSV)</a></h3><table><tr><th>Rifa</th><th>Vendidos</th><th>Pagos</th><th>Disponíveis</th><th>Arrecadado</th></tr>
+{% for r in rifas %}<tr><td>{{ r.nome }}</td><td>{{ st[r.id].vendidos }}</td><td>{{ st[r.id].pagos }}</td><td>{{ st[r.id].disp }}</td><td>R$ {{ '%.2f'|format(st[r.id].arrecadado) }}</td></tr>{% endfor %}
+<tr><th colspan="4">Total</th><th>R$ {{ '%.2f'|format(total) }}</th></tr></table></section>
+<section class="card"><h3>Vendas por membro</h3><table>{% for n,c in por_membro %}<tr><td>{{ n }}</td><td>{{ c }}</td></tr>{% endfor %}</table></section>{% endblock %}

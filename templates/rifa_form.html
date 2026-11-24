@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block c %}{% include "abas.html" %}
+<form method="post" class="card form"><h3>Nova rifa</h3><input type="hidden" name="_csrf" value="{{ csrf() }}">
+<input name="nome" placeholder="Nome do prêmio" required><textarea name="descricao" placeholder="Descrição"></textarea>
+<input name="imagem" placeholder="URL da imagem do prêmio"><input name="valor" placeholder="Valor por número (R$)" required>
+<input name="total" type="number" min="1" placeholder="Quantidade de números" required><input name="data" type="date">
+<button class="btn">Criar rifa</button></form>{% endblock %}

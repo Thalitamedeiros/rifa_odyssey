@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block c %}<form method="post" class="card fgrid"><input type="hidden" name="_csrf" value="{{ csrf() }}"><input name="nome" placeholder="Nome" required><input name="email" type="email" placeholder="E-mail" required>
+<input name="senha" type="password" placeholder="Senha (mín. 6)" required><label><input type="checkbox" name="admin"> Administrador</label><button class="btn">Cadastrar</button></form>
+<section class="card"><table><tr><th>Nome</th><th>E-mail</th><th>Perfil</th><th>Vendas</th><th></th></tr>{% for m in ms %}<tr><td>{{ m.nome }}</td><td>{{ m.email }}</td><td>{{ 'Admin' if m.is_admin else 'Membro' }}</td><td>{{ cont.get(m.id,0) }}</td>
+<td><form method="post" action="{{ url_for('membro_ativo',uid=m.id) }}"><input type="hidden" name="_csrf" value="{{ csrf() }}"><button class="lnk">{{ 'Desativar' if m.ativo else 'Ativar' }}</button></form></td></tr>{% endfor %}</table></section>{% endblock %}

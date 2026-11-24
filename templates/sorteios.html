@@ -1,0 +1,3 @@
+{% extends "base.html" %}{% block c %}<section class="card"><h3>Histórico de sorteios</h3><div class="scroll"><table><tr><th>Data</th><th>Rifa</th><th>Nº</th><th>Ganhador(a)</th><th>Vendedor(a)</th><th>Situação</th>{% if current_user.is_admin %}<th>Elegíveis</th><th>Motivo</th>{% endif %}</tr>
+{% for s in ss %}<tr><td>{{ s.em.strftime('%d/%m/%Y %H:%M') }}</td><td>{{ s.rifa.nome }}</td><td>{{ s.numero }}</td><td>{{ s.venda.comprador }}</td><td>{{ s.venda.vendedor.nome }}</td><td>{{ 'válido' if s.ativo else 'anulado' }}</td>
+{% if current_user.is_admin %}<td>{{ s.elegiveis }}</td><td>{{ s.motivo or '' }}</td>{% endif %}</tr>{% else %}<tr><td colspan="8">Nenhum sorteio.</td></tr>{% endfor %}</table></div></section>{% endblock %}

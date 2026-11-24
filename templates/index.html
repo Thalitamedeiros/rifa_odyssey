@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block c %}
+<div class="grid cards">
+<div class="card kpi"><span>Rifas</span><b>{{ tot.rifas }}</b></div><div class="card kpi"><span>Números vendidos</span><b>{{ tot.vendidos }}</b></div>
+<div class="card kpi"><span>Disponíveis</span><b>{{ tot.disp }}</b></div><div class="card kpi"><span>Arrecadado (pago)</span><b>R$ {{ '%.2f'|format(tot.arrecadado) }}</b></div>
+<div class="card kpi"><span>Membros</span><b>{{ tot.membros }}</b></div><div class="card kpi"><span>Em andamento</span><b>{{ tot.andamento }}</b></div></div>
+<div class="grid two"><div class="card"><h3>Andamento das rifas</h3>{% for r in rifas %}<p><a href="{{ url_for('rifa',rid=r.id) }}">{{ r.nome }}</a> — {{ st[r.id].pct }}%</p>
+<div class="bar"><i style="width:{{ st[r.id].pct }}%"></i></div>{% else %}<p>Nenhuma rifa cadastrada.</p>{% endfor %}</div>
+<div class="card"><h3>🏆 Últimos sorteios</h3>{% for s in ult %}<p>{{ s.rifa.nome }}: nº <b>{{ s.numero }}</b> · {{ s.em.strftime('%d/%m/%Y %H:%M') }}</p>{% else %}<p>Nenhum sorteio realizado.</p>{% endfor %}</div></div>
+{% endblock %}

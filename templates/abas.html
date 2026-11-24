@@ -1,0 +1,2 @@
+<div class="tabs">{% for a in abas %}<a href="{{ url_for('rifa',rid=a.id) }}" class="{{ 'on' if r is defined and r.id==a.id }}">🎟️ Rifa {{ '%02d'|format(loop.index) }}<small>{{ a.nome }}</small></a>{% endfor %}
+{% if current_user.is_admin %}<a href="{{ url_for('nova_rifa') }}">＋ Nova Rifa</a>{% endif %}</div>

@@ -1,0 +1,16 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rifas Odyssey</title><link rel="icon" href="{{ url_for('static', filename='logo.png') }}"><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body>{% if current_user.is_authenticated %}
+<aside class="side"><a class="logo" href="{{ url_for('inicio') }}"><img src="{{ url_for('static', filename='logo.png') }}" alt="Odyssey"></a>
+<nav><a href="{{ url_for('inicio') }}" class="{{ 'on' if request.endpoint=='inicio' }}">🏠 Início</a>
+<a href="{{ url_for('rifas') }}" class="{{ 'on' if request.endpoint in ('rifa','rifas','nova_rifa') }}">🎟️ Rifas</a>
+<a href="{{ url_for('sorteios') }}" class="{{ 'on' if request.endpoint=='sorteios' }}">📊 Sorteios</a>
+{% if current_user.is_admin %}<a href="{{ url_for('membros') }}" class="{{ 'on' if request.endpoint=='membros' }}">👥 Membros da equipe</a>
+<a href="{{ url_for('relatorios') }}" class="{{ 'on' if request.endpoint=='relatorios' }}">📄 Relatórios</a>{% endif %}</nav>
+<em class="lema">Juntos, mais longe!</em></aside>{% endif %}
+<main><header class="top"><div><h1>Rifas Odyssey</h1><p>Cadastre suas rifas, acompanhe as vendas e participe dos sorteios!</p></div>
+{% if current_user.is_authenticated %}<form method="post" action="{{ url_for('logout') }}" class="user">
+<input type="hidden" name="_csrf" value="{{ csrf() }}">👤 {{ current_user.nome }} <button class="lnk">Sair</button></form>{% endif %}</header>
+{% for c,m in get_flashed_messages(with_categories=true) %}<div class="flash {{ c }}">{{ m }}</div>{% endfor %}
+{% if not current_user.is_authenticated %}<div class="biglogo"><img src="{{ url_for('static', filename='logo.png') }}" alt="Odyssey"></div>{% endif %}{% block c %}{% endblock %}</main></body></html>

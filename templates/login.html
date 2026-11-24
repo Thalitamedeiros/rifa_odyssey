@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block c %}
+<form method="post" class="card login"><h2>Entrar</h2><input type="hidden" name="_csrf" value="{{ csrf() }}">
+<input name="email" type="email" placeholder="E-mail" required><input name="senha" type="password" placeholder="Senha" required>
+<button class="btn">Entrar</button></form>{% endblock %}

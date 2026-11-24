@@ -1,0 +1,26 @@
+{% extends "base.html" %}{% block c %}{% include "abas.html" %}
+<section class="card head">{% if r.imagem_url %}<img src="{{ r.imagem_url }}" alt="">{% endif %}
+<div class="grow"><h2>{{ r.nome }} <span class="tag">{{ r.status }}</span></h2><p>{{ r.descricao }}</p>
+<div class="meta"><span>Total <b>{{ r.total_numeros }}</b></span><span>Vendidos <b>{{ s.vendidos }}</b></span><span>Pagos <b>{{ s.pagos }}</b></span><span>Livres <b>{{ s.disp }}</b></span>
+<span>R$ {{ r.valor }}/nº</span><div class="bar grow"><i style="width:{{ s.pct }}%"></i></div><b>{{ s.pct }}%</b></div></div>
+{% if current_user.is_admin %}<form method="post" action="{{ url_for('sortear',rid=r.id) }}" class="draw"><input type="hidden" name="_csrf" value="{{ csrf() }}">
+{% if sorteio %}<input name="motivo" placeholder="Motivo para refazer" required>{% endif %}
+<button class="btn big" onclick="return confirm('Realizar sorteio desta rifa?')">⚖️ Realizar Sorteio</button></form>{% endif %}</section>
+<div class="grid main"><section class="card"><div class="bar2"><h3>Vendas</h3><form method="get"><input name="q" value="{{ busca }}" placeholder="Buscar por nome, número, vendedor ou telefone…"></form></div>
+<div class="scroll"><table><tr><th>Nº</th><th>Ponto</th><th>Comprador(a)</th><th>Vendedor(a)</th><th>Endereço</th><th>Contato</th><th>Pgto</th>{% if current_user.is_admin %}<th></th>{% endif %}</tr>
+{% for v in vendas %}<tr><td>{{ '%03d'|format(v.numero) }}</td><td>{{ v.ponto }}</td><td>{{ v.comprador }}</td><td>{{ v.vendedor.nome }}</td><td>{{ v.endereco }}</td><td>{{ v.telefone }}</td><td>{{ v.pagamento }}</td>
+{% if current_user.is_admin %}<td class="act"><form method="post" action="{{ url_for('venda_pagamento',vid=v.id) }}"><input type="hidden" name="_csrf" value="{{ csrf() }}"><button class="lnk">$</button></form>
+<form method="post" action="{{ url_for('venda_excluir',vid=v.id) }}" onsubmit="return confirm('Excluir?')"><input type="hidden" name="_csrf" value="{{ csrf() }}"><button class="lnk">✕</button></form></td>{% endif %}</tr>
+{% else %}<tr><td colspan="8">Nenhuma venda encontrada.</td></tr>{% endfor %}</table></div></section>
+<section class="card center"><h3>🏆 Resultado do Sorteio</h3>{% if sorteio %}<div class="win"><div class="num">{{ sorteio.numero }}</div>
+<p><b>{{ sorteio.venda.comprador }}</b></p>{% if current_user.is_admin %}<p>📞 {{ sorteio.venda.telefone }}</p>{% endif %}<p>Vendedor(a): {{ sorteio.venda.vendedor.nome }}</p>
+<p>{{ r.nome }}</p><small>{{ sorteio.em.strftime('%d/%m/%Y %H:%M:%S') }}</small></div>
+{% else %}<div class="trophy">🏆</div><b>Em breve…</b><p>Realize o sorteio para descobrir o ganhador da {{ r.nome }}!</p>{% endif %}</section></div>
+{% if r.status=='ativa' %}<section class="card form"><h3>Registrar número vendido</h3><form method="post" action="{{ url_for('venda_nova',rid=r.id) }}" class="fgrid">
+<input type="hidden" name="_csrf" value="{{ csrf() }}"><input name="numero" type="number" min="1" max="{{ r.total_numeros }}" placeholder="Nº da rifa" required><input name="ponto" placeholder="Ponto (ex.: A1)">
+<input name="comprador" placeholder="Nome completo do comprador" required><input name="telefone" placeholder="Telefone/WhatsApp com DDD" required><input name="endereco" placeholder="Endereço completo" required>
+{% if current_user.is_admin %}<select name="vendedor">{% for m in membros %}<option value="{{ m.id }}" {{ 'selected' if m.id==current_user.id }}>{{ m.nome }}</option>{% endfor %}</select>{% endif %}
+<select name="pagamento"><option value="pendente">Pagamento pendente</option><option value="pago">Pago</option></select><button class="btn">Registrar</button></form>
+<details><summary>{{ n_livres }} números disponíveis</summary><p class="chips">{% for n in livres %}<span>{{ n }}</span>{% endfor %}{% if n_livres>300 %}…{% endif %}</p></details></section>{% endif %}
+{% if current_user.is_admin %}<form method="post" action="{{ url_for('rifa_excluir',rid=r.id) }}" onsubmit="return confirm('Excluir rifa e todas as vendas?')"><input type="hidden" name="_csrf" value="{{ csrf() }}"><button class="lnk">Excluir rifa</button></form>{% endif %}
+<div class="card note"><b>Importante!</b> Cada rifa possui seu próprio sorteio. Só participam números com pagamento confirmado.</div>{% endblock %}
